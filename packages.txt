@@ -1,0 +1,20 @@
+packages to install
+
+// Mongoose
+express
+morgan
+bcrypt
+jwt
+nodemailer
+dotenv
+cors
+cookie-parser
+nodemon -D
+
+// Apps
+postman
+git
+heroku
+
+// Chrome extension
+vuejs extension

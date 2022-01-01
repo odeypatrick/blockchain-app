@@ -1,0 +1,1 @@
+const Measurement = require('../models/measurement')
