@@ -1,6 +1,4 @@
 body {
-    display: flex;
-    justify-content: center;
     background: linear-gradient(#ffb428, #ff5900);
     font-family: Arial, Helvetica, sans-serif;
     height: 100vh;

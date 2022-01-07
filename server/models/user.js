@@ -18,13 +18,15 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         require: true,
-        unique: true
+        unique: true,
+        trim: true
     },
     address: {
         type: String,
+        trim: true,
     },
-    photo: {
-        type: Buffer
+    profileImage: {
+        type: String
     },
     password: {
         type: String,
@@ -34,15 +36,15 @@ const userSchema = new mongoose.Schema({
         type: Number,
         require: true
     },
+    followings: {
+        type: Array,
+        default: [],
+    },
     store: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store"
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
-})
+}, { timestamps: true })
 
 
 userSchema.pre('save', function (next) {

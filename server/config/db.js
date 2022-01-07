@@ -5,5 +5,5 @@ const mongoose = require('mongoose')
     useUnifiedTopology: true,
 })
 .then(response => console.log(`Database Connected: ${response}`))
-.catch(err => console.log(`Database error: ${err}`))
+.catch(err => console.log(`Database ${err}`))
 

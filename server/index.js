@@ -1,7 +1,9 @@
 require("dotenv").config()
 require('../server/config/db')
 const express = require('express')
+const http = require('http');
 const app = express()
+const server = http.createServer(app)
 const cors = require('cors')
 const morgan = require('morgan')
 const path = require('path')
@@ -16,6 +18,7 @@ const indexRoute = require('./routes/api'),
       categoryRoute = require('./routes/api/category'),
       postRoute = require('./routes/api/post'),
       reviewRoute = require('./routes/api/review')
+      chatRoute = require('./routes/api/chat')
 
       // Middlewares
 app.use(express.json())
@@ -37,9 +40,10 @@ app.use('/api', orderRoute)
 app.use('/api', categoryRoute)
 app.use('/api', postRoute)
 app.use('/api', reviewRoute)
+app.use('/api', chatRoute)
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server running on port ${port}`)
 })

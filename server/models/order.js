@@ -7,18 +7,14 @@ const orderSchema = mongoose.Schema({
             ref: "Product"
         }
     ],
-    user: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
     confirmed: {
         type: Boolean,
         default: false
-    },
-    date: {
-        type: Date,
-        default: Date.now
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model("Order", orderSchema)

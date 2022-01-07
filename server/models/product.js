@@ -14,7 +14,8 @@ const productSchema = mongoose.Schema({
     images: [
         {
             type: String,
-        }
+            default: ""
+        },
     ],
     description: {
         type: String,
@@ -22,6 +23,14 @@ const productSchema = mongoose.Schema({
     price: {
         type: String,
         require: true,
+    },
+    totalQuantity: {
+        type: Number,
+        require: true
+    },
+    available: {
+        type: Boolean,
+        default: true
     },
     variations: [
         {
@@ -34,10 +43,11 @@ const productSchema = mongoose.Schema({
             ref: "Review" 
         }
     ],
-    tailor: {
+    vendor: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        require: true,
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model("Product", productSchema)

@@ -1,11 +1,10 @@
 const mongoose = require("mongoose");
 
 const reviewSchema = mongoose.Schema({
-    rating: [
-        {
+    userId: String,
+    rating: {
             type: Number
-        }
-    ],
+    },
     comment: {
         type: String,
         trim: true
@@ -17,11 +16,7 @@ const reviewSchema = mongoose.Schema({
     product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product"
-    },
-    date: {
-        type: Date,
-        default: Date.now
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model("Review", reviewSchema)

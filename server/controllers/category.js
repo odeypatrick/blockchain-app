@@ -39,3 +39,12 @@ exports.getSingleCategory = (req, res) => {
     .then(category => res.status(200).json(category))
     .catch(err => res.status(500).json(err))
 }
+
+// UPDATE CATEGORY
+exports.updateCategory = (req, res) => {
+    Category.findOneAndUpdate({ _id: req.params.id }, { $set: req.body })
+    .then(category => {
+        res.status(201).json({ category, msg: "Category updated successfully" })
+    })
+    .catch(err => res.status(500).json({ error: err, msg: "Something went wrong" }))
+}

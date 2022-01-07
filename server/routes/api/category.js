@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { addCategory, deleteCategory, getAllCategory, getSingleCategory } = require('../../controllers/category')
+const { addCategory, deleteCategory, getAllCategory, getSingleCategory,updateCategory } = require('../../controllers/category')
 const { isAuthenticated } = require('../../controllers/AuthController')
 
 // Add Category
@@ -13,5 +13,8 @@ router.get('/category/all', isAuthenticated, getAllCategory)
 
 // Get single Category
 router.get('/category/:name', isAuthenticated, getSingleCategory)
+
+// Update category
+router.put('/category/:id/edit', isAuthenticated, updateCategory)
 
 module.exports = router;

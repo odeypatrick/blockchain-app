@@ -4,14 +4,30 @@ const storeSchema = mongoose.Schema({
     storeName: {
         type: String,
         trim: true,
+        unique: true,
         lowercase: true
     },
-    displayImage: Buffer,
-    storeDiscription: String,
+    description: String,
     websiteLink: String,
+    followers: {
+        type: Array,
+        default: [],
+    },
+    followings: {
+        type: Array,
+        default: [],
+    },
     active: {
         type: Boolean,
         default: true
+    },
+    profilePicture: {
+        type: String,
+        default: "",
+    },
+    coverPicture: {
+        type: String,
+        default: "",
     },
     products: [
         {
@@ -23,6 +39,6 @@ const storeSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model("Store", storeSchema)

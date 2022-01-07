@@ -10,6 +10,6 @@ const billingSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model("Billing", billingSchema);

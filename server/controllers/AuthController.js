@@ -56,12 +56,13 @@ exports.login = (req, res) => {
 exports.getUserData = (req, res) => {
     User.findOne({ _id: req.user.userId }).exec()
     .then(user => {
-        const { name, email, role, photo, phone } = user
+        const { _id, name, email, role, profileImage, phone } = user
         res.status(200).json({
+            _id,
             name,
             email,
             phone,
-            photo,
+            profileImage,
             role
         })
     })
@@ -79,3 +80,32 @@ exports.isAuthenticated = (req, res, next) => {
         next()
     })
 }
+
+exports.updateUser = (req, res) => {
+    const { name, email, phone, address } = req.body
+    if(req.file) {
+        User.findOneAndUpdate({ _id: req.params.id }, { $set: 
+            { 
+                name,
+                email,
+                phone,
+                address,
+                profileImage: req.file.location
+            }
+        })
+        .then(user => res.status(201).json(user))
+        .catch(err => res.status(500).json({ error: err }))
+    } else {
+        User.findOneAndUpdate({ _id: req.params.id }, { $set: 
+            { 
+                name,
+                email,
+                phone,
+                address,
+            }
+        })
+        .then(user => res.status(201).json(user))
+        .catch(err => res.status(500).json({ error: err }))
+    }
+}
+
