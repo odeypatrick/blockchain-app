@@ -1,14 +1,19 @@
 const mongoose = require('mongoose')
 
 const postSchema = mongoose.Schema({
-    user: {
+    storeId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        require: true
+        required: true
     },
-    caption: String,
-    photo: {
-        type: String
+    description: {
+        type: String,
+        max: 500,
+    },
+    photos: {
+        type: Array,
+        default: [],
+        required: true
     },
     likes: {
         type: Array,

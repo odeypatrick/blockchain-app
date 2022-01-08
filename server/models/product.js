@@ -3,50 +3,52 @@ const mongoose = require('mongoose')
 const productSchema = mongoose.Schema({
     name: {
         type: String,
-        require: true,
+        required: true,
         trim: true,
         lowercase: true
     }, 
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category"
+        type: String,
+        required: true
     },
-    images: [
-        {
-            type: String,
-            default: ""
-        },
-    ],
+    images:{
+        type: Array,
+        default: []
+    },
     description: {
         type: String,
     },
     price: {
         type: String,
-        require: true,
+        required: true,
     },
     totalQuantity: {
         type: Number,
-        require: true
+        required: true
     },
     available: {
         type: Boolean,
         default: true
     },
-    variations: [
-        {
-            type: Object
-        }
-    ],
+    variations: {
+        type: Object,
+        default: {}
+    },
     reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Review" 
         }
     ],
-    vendor: {
+    vendorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        require: true,
+        required: true,
+    },
+    storeId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Store",
+        required: true,
     }
 }, { timestamps: true })
 

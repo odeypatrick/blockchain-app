@@ -3,18 +3,18 @@ const { addCategory, deleteCategory, getAllCategory, getSingleCategory,updateCat
 const { isAuthenticated } = require('../../controllers/AuthController')
 
 // Add Category
-router.post('/category/add', isAuthenticated, addCategory)
+router.post('/category', isAuthenticated, addCategory)
 
 // delete Category
-router.delete('/category/:id/remove', isAuthenticated, deleteCategory)
+router.delete('/category/:id', isAuthenticated, deleteCategory)
 
 // getAllCategory
-router.get('/category/all', isAuthenticated, getAllCategory)
+router.get('/category', isAuthenticated, getAllCategory)
 
 // Get single Category
 router.get('/category/:name', isAuthenticated, getSingleCategory)
 
 // Update category
-router.put('/category/:id/edit', isAuthenticated, updateCategory)
+router.put('/category/:id', isAuthenticated, updateCategory)
 
 module.exports = router;

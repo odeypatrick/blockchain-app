@@ -7,11 +7,13 @@ const reviewSchema = mongoose.Schema({
     },
     comment: {
         type: String,
-        trim: true
+        trim: true,
+        required: true
     },
     name: {
         type: String,
-        trim: true
+        trim: true,
+        required: true
     },
     product: {
         type: mongoose.Schema.Types.ObjectId,

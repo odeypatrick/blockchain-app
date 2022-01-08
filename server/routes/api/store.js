@@ -5,22 +5,22 @@ const {
 const { isAuthenticated } = require('../../controllers/AuthController')
 
 // CREATE STORE
-router.post('/store/create', isAuthenticated, createStore) 
+router.post('/store', isAuthenticated, createStore) 
 
 // GET STOREINFO BY OWNER
-router.get('/store/user/:userId/', isAuthenticated, getStoreInfoByOwner)
+router.get('/store/:userId/user', isAuthenticated, getStoreInfoByOwner)
 
 // GET STOREINFO BY ID
-router.get('/store/:userId/', getStoreInfoById)
+router.get('/store/:id', getStoreInfoById)
 
 // GET STOREINFO BY Storename
 router.get('/store/:storeName/get', getStoreInfoByStoreName)
 
 // UPDATE STORE INFO
-router.put('/store/:id/edit', isAuthenticated, updateStore)
+router.put('/store/:id', isAuthenticated, updateStore)
 
 //UPDATE STORE STATUS - OPEN/CLOSED
-router.put('/store/:id/edit', isAuthenticated, updateStoreStatus)
+router.put('/store/:id/status', isAuthenticated, updateStoreStatus)
 
 // Follow and unfollow store
 router.put('/store/:id/follow', isAuthenticated, followStore)

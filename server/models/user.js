@@ -4,20 +4,20 @@ const bcrypt = require('bcrypt')
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        require: true,
+        required: true,
         trim: true,
         lowercase: true
     },
     email: {
         type: String,
-        require: true,
+        required: true,
         trim: true,
         lowercase: true,
         unique: true
     },
     phone: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         trim: true
     },
@@ -30,11 +30,11 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        require: true
+        required: true
     },
     role: {
         type: Number,
-        require: true
+        required: true
     },
     followings: {
         type: Array,

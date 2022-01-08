@@ -19,6 +19,7 @@ const indexRoute = require('./routes/api'),
       postRoute = require('./routes/api/post'),
       reviewRoute = require('./routes/api/review')
       chatRoute = require('./routes/api/chat')
+      paymentRoute = require('./routes/api/payment')
 
       // Middlewares
 app.use(express.json())
@@ -41,6 +42,7 @@ app.use('/api', categoryRoute)
 app.use('/api', postRoute)
 app.use('/api', reviewRoute)
 app.use('/api', chatRoute)
+app.use('/api', paymentRoute)
 
 const port = process.env.PORT || 5000;
 

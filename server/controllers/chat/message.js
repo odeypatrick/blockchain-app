@@ -24,3 +24,10 @@ exports.getMessages = async (req, res) => {
         res.status(500).json(err);
       }
 } 
+
+// Delete
+exports.deleteMessage = async (req, res) => {
+  Message.findByIdAndDelete(req.params.id).exec()
+  .then(data => res.json({ msg: "Message Deleted", data }))
+  .catch(err => res.status(500).json(err))
+}

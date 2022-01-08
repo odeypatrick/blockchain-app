@@ -22,7 +22,7 @@ exports.signup = (req, res) => {
                 const newUser = User(req.body);
                 newUser.save(function (err, newUser) {
                     if (err) {
-                        res.json({success: false, error: 'Failed to save'})
+                        res.json({success: false, error: `Failed to save - ${err}`})
                     }
                     else {
                         res.json({success: true, msg: 'Successfully saved'})
@@ -43,7 +43,7 @@ exports.login = (req, res) => {
             if (!user) return res.status(403).send({success: false, msg: 'Authentication Failed, User not found'})
             user.comparePassword(password, (err, isMatch) => {
                 if (isMatch && !err) {
-                    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY)
+                    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.SECRET_KEY)
                     res.status(200).json({success: true, token: token, role: user.role})
                 }
                 else {

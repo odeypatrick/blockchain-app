@@ -2,13 +2,17 @@ const Post = require('../models/post')
 const User = require('../models/user')
 
 exports.addPost = (req, res) => {
-    const newPost = Post(req.body)
-    newPost.save((err, post) => {
-        if(err) {
-            return res.status(500).json({ err, success: false, msg: "Something went wrong" })
-        } 
-        return res.status(201).json({ msg: "Posted added successfully!" })
-    })
+    if(req.user.role == 1 || req.user.role == 2) {
+      const newPost = Post(req.body)
+      newPost.save((err, post) => {
+          if(err) {
+              return res.status(500).json({ err, success: false, msg: "Something went wrong" })
+          } 
+          return res.status(201).json({ msg: "Posted added successfully!" })
+      })
+    } else{
+      res.sendStatus(401)
+    }
 }
 
 // GET POSTS
@@ -30,18 +34,20 @@ exports.getSinglePost = (req, res) => {
 
 // Get a users post
 exports.getUserPosts = (req, res) => {
-    Post.find({ user: req.params.userId }).exec()
+    Post.find({ userId: req.params.userId }).exec()
     .then(posts => res.status(200).json(posts))
     .catch(err => res.status(500).json(err))
 }
 
 // Update Post
 exports.updatePost = (req, res) => {
-    Post.findOneAndUpdate({ _id: req.params.id }, { $set: req.body })
-    .then(post => {
-        res.status(201).json({ post, msg: "Post updated successfully" })
-    })
-    .catch(err => res.status(500).json({ error: err, msg: "Something went wrong" }))
+    if(req.user.role == 1 || req.user.role == 2) {
+      Post.findOneAndUpdate({ _id: req.params.id }, { $set: req.body })
+      .then(post => {
+          res.status(201).json({ post, msg: "Post updated successfully" })
+      })
+      .catch(err => res.status(500).json({ error: err, msg: "Something went wrong" }))
+    }
 }
 
 // Like/Dislike a post 
@@ -67,7 +73,7 @@ exports.getTimelinePosts = async (req, res) => {
         const userPosts = await Post.find({ userId: currentUser._id });
         const friendPosts = await Promise.all(
           currentUser.followings.map((friendId) => {
-            return Post.find({ userId: friendId });
+            return Post.find({ storeId: friendId }).populate('storeId').exec();
           })
         );
         res.status(200).json(userPosts.concat(...friendPosts));

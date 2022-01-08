@@ -2,26 +2,34 @@ const Category = require('../models/category')
 
 // ADD CATEGORY
 exports.addCategory = (req, res) => {
-    const newCategory = Category(req.body);
-    newCategory.save(function (err, category) {
-        if (err) {
-            res.json({success: false, error: 'Cannot add category'})
-        }
-        else {
-            res.status(201).json({success: true, msg: 'Successfully added category'})
-        }
-    })
+    if(req.user.role == 3) {
+        const newCategory = Category(req.body);
+        newCategory.save(function (err, category) {
+            if (err) {
+                res.json({success: false, error: 'Cannot add category'})
+            }
+            else {
+                res.status(201).json({success: true, msg: 'Successfully added category'})
+            }
+        })
+    } else {
+        res.sendStatus(401)
+    }
 }
 
 // DELETE CATEGORY
 exports.deleteCategory = (req, res) => {
-    Category.findByIdAndDelete(req.params.id).exec()
-    .then(res => {
-        res.json({
-            msg: "Category deleted successfully"
+    if(req.user.role == 3) {
+        Category.findByIdAndDelete(req.params.id).exec()
+        .then((data) => {
+            res.status(200).json({
+                msg: "Category deleted successfully"
+            })
         })
-    })
-    .catch(err => res.status(500).json({ error: `Could not delete - ${err}` }))
+        .catch(err => res.status(500).json({ error: `Could not delete - ${err}` }))
+    } else {
+        res.sendStatus(401)
+    }
 }
 
 // Get all Category
@@ -42,9 +50,13 @@ exports.getSingleCategory = (req, res) => {
 
 // UPDATE CATEGORY
 exports.updateCategory = (req, res) => {
-    Category.findOneAndUpdate({ _id: req.params.id }, { $set: req.body })
-    .then(category => {
-        res.status(201).json({ category, msg: "Category updated successfully" })
-    })
-    .catch(err => res.status(500).json({ error: err, msg: "Something went wrong" }))
+    if(req.user.role == 3) {
+        Category.findOneAndUpdate({ _id: req.params.id}, { $set: req.body })
+        .then(category => {
+            res.status(201).json({ category, msg: "Category updated successfully" })
+        })
+        .catch(err => res.status(500).json({ error: err, msg: "Something went wrong" }))
+    } else {
+        res.sendStatus(401)
+    }
 }

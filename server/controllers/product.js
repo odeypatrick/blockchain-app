@@ -1,20 +1,54 @@
 const Product = require('../models/product')
-const { upload } = require('./upload')
+const Category = require('../models/category')
+const Post = require('../models/post')
 
 // ADD PRODUCTS
 exports.addProduct = (req, res) => {
-    const newProduct = Product(req.body);
-    newProduct.save(function (err, newUser) {
-        if (err) return res.json({success: false, error: 'Cannot add product'})
-        else res.status(201).json({success: true, msg: 'Successfully added product'})
-    })
+    if(req.user.role == 1 || req.user.role == 2) {
+        const { name, category, description, price, totalQuantity, variations, vendorId }
+        const newProduct = Product({
+            name, 
+            category,
+            images: req.files.location,
+            description,
+            price,
+            totalQuantity,
+            variations,
+            vendorId,
+            storeId
+        });
+        // Save product
+        newProduct.save(function (err, newProduct) {
+            if (err) return res.json({success: false, error: 'Cannot add product'})
+            else {
+                // Push Product to category
+                Category.updateOne({ name: req.body.category }, { $push: { products: newProduct } })
+                .then(() => {
+                    // Create a new post after the product is uploaded
+                    Post.create({
+                        storeId: req.body.storeId,
+                        description: req.body.description,
+                        photos: newProduct.images
+                    }, (err, post) => {
+                        if(err) {
+                            return res.status(500).json({success: false, error: 'An error occured while creating Post'})
+                        }
+                        res.status(201).json({success: true, msg: 'Product addition successful', post})
+                    })
+                })
+                .catch(err => res.status(500).json(err))
+            }
+        })
+    } else {
+        res.sendStatus(401)
+    }
 }
 
 // GET PRODUCTS FROM DATABASE USING DIFFERENT METHODS
 
 // Get all products belonging to a single tailor/clothier
 exports.getUserProducts = (req, res) => {
-    Product.find({ vendor: req.params.userId }).exec((err, products) => {
+    Product.find({ vendorId: req.params.userId }).exec((err, products) => {
         if(err) return res.status(500).json({ error: err, msg: "Could not fetch products" })
         // If all is good
         return res.status(200).json(products)
@@ -41,7 +75,7 @@ exports.getProductsByCategory = (req, res) => {
 
 // search products
 exports.searchProducts = (req, res) => {
-    const query = req.body.q;
+    const query = req.params.searchParam;
     const searchQuery = query.toLowerCase()
 
     Product.find({ 
@@ -53,26 +87,34 @@ exports.searchProducts = (req, res) => {
 
 // UPDATE PRODUCTs
 exports.updateProducts = (req, res) => {
-    const { name, category, description, price, variations, vendor } = req.body
-    Product.findOneAndUpdate({ _id: req.params.id }, { $set: 
-        { 
-            name,
-            category,
-            description,
-            price,
-            variations,
-            vendor,
-        }
-    })
-    .then(product => {
-        res.status(201).json({ product, msg: "Product updated successfully" })
-    })
-    .catch(err => res.status(500).json({ error: err, msg: "Something went wrong" }))
+    if(req.user.role == 1 || req.user.role == 2) {
+        const { name, category, description, price, variations, vendorId } = req.body
+        Product.findOneAndUpdate({ _id: req.params.id }, { $set: 
+            { 
+                name,
+                category,
+                description,
+                price,
+                variations,
+                vendorId,
+            }
+        })
+        .then(product => {
+            res.status(201).json({ product, msg: "Product updated successfully" })
+        })
+        .catch(err => res.status(500).json({ error: err, msg: "Something went wrong" }))
+    } else {
+        res.sendStatus(401)
+    }
 }
 
 // DELETE PRODUCT
 exports.deleteProduct = (req, res) => {
-    Product.findByIdAndDelete(req.params.id).exec()
-    .then(res => res.json({ msg: "Product deleted successfully" }))
-    .catch(err => res.status(500).json({ error: `Could not delete product - ${err}` }))
+    if(req.user.role == 1 || req.user.role == 2) {
+        Product.findByIdAndDelete(req.params.id).exec()
+        .then(res => res.json({ msg: "Product deleted successfully" }))
+        .catch(err => res.status(500).json({ error: `Could not delete product - ${err}` }))
+    } else {
+        res.sendStatus(401)
+    }
 }

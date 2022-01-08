@@ -2,24 +2,28 @@ const Store = require('../models/store')
 const User = require('../models/user')
 
 exports.createStore = (req, res) => {
-    const newStore = Store(req.body);
-    newStore.save(function (err, store) {
-        if (err) {
-            res.json({success: false, error: `Store creation failed --- ${err}`})
-        }
-        else {
-            User.findOneAndUpdate({ _id: req.body.userId }, { $set: 
-                { 
-                    store,
-                }
-            })
-            .then(user => {
-                if(user) res.json({ success: true, error: `Store creation successfull` }) 
-                else res.json({ success: true, error: `Store creation failed` })
-            })
-            .catch(err => res.status(500).json({ error: err }))
-        }
-    })
+    if(req.user.role == 1 || req.user.role == 2) {
+        const newStore = Store(req.body);
+        newStore.save(function (err, store) {
+            if (err) {
+                res.json({success: false, error: `Store creation failed --- ${err}`})
+            }
+            else {
+                User.findOneAndUpdate({ _id: req.body.owner }, { $set: 
+                    { 
+                        store,
+                    }
+                })
+                .then(user => {
+                    if(user) res.json({ success: true, error: `Store creation successfull` }) 
+                    else res.json({ success: false, error: `Store creation failed` })
+                })
+                .catch(err => res.status(500).json({ error: err }))
+            }
+        })
+    } else {
+        res.sendStatus(401)
+    }
 }
 
 // Get store info by owner
@@ -54,36 +58,37 @@ exports.getStoreInfoByStoreName = (req, res) => {
 
 // Edit Store Info
 exports.updateStore = (req, res) => {
-    const { storeName, storeDescription, websiteLink } = req.body
-    Store.findOneAndUpdate({ _id: req.params.id }, { $set: 
-        { 
-            storeName,
-            storeDescription,
-            websiteLink,
-            updatedAt: Date.now
-        }
-    })
-    .then(store => {
-        res.status(201).json({ store, msg: "Store updated successfully" })
-    })
-    .catch(err => res.status(500).json({ error: err }))
+    if(req.user.role == 1 || req.user.role == 2) {
+        Store.findOneAndUpdate({ _id: req.params.id }, { $set: req.body
+        })
+        .then(store => {
+            res.status(201).json({ store, msg: "Store updated successfully" })
+        })
+        .catch(err => res.status(500).json({ error: err }))
+    } else {
+        res.sendStatus(401)
+    }
 }
 
 // Open or Close store
 exports.updateStoreStatus = (req, res) => {
-    Store.findOne({ _id: req.params.id })
-    .then(store => {
-        Store.findOneAndUpdate({ storeName: req.body.storeName }, { $set: 
-            { 
-                active: !store.active
-            }
-        })
+    if(req.user.role == 1 || req.user.role == 2) {
+        Store.findOne({ _id: req.params.id })
         .then(store => {
-            res.status(201).json({ store, msg: "Store status updated successfully" })
+            Store.findOneAndUpdate({ storeName: req.body.storeName }, { $set: 
+                { 
+                    active: !store.active
+                }
+            })
+            .then(store => {
+                res.status(201).json({ store, msg: "Store status updated successfully" })
+            })
+            .catch(err => res.status(500).json({ error: err }))
         })
         .catch(err => res.status(500).json({ error: err }))
-    })
-    .catch(err => res.status(500).json({ error: err }))
+    } else {
+        res.sendStatus(401)
+    }
 } 
 
 exports.followStore = async (req, res) => {
