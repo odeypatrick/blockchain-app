@@ -7,6 +7,8 @@ const server = http.createServer(app)
 const cors = require('cors')
 const morgan = require('morgan')
 const path = require('path')
+const socketio = require('socket.io')
+const io = socketio(server)
 
       // Routes
 const indexRoute = require('./routes/api'),
@@ -49,3 +51,7 @@ const port = process.env.PORT || 5000;
 server.listen(port, () => {
     console.log(`Server running on port ${port}`)
 })
+
+module.exports = {
+    io
+}
