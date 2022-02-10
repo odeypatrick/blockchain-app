@@ -5,7 +5,7 @@ const Post = require('../models/post')
 // ADD PRODUCTS
 exports.addProduct = (req, res) => {
     if(req.user.role == 1 || req.user.role == 2) {
-        const { name, category, description, price, totalQuantity, variations, vendorId }
+        const { name, category, description, price, totalQuantity, variations, vendorId } = req.body
         const newProduct = Product({
             name, 
             category,
