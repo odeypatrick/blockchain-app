@@ -44,7 +44,7 @@ exports.login = (req, res) => {
             user.comparePassword(password, (err, isMatch) => {
                 if (isMatch && !err) {
                     const token = jwt.sign({ userId: user._id, role: user.role }, process.env.SECRET_KEY)
-                    res.status(200).json({success: true, token: token, role: user.role})
+                    res.status(200).json({success: true, token: token, role: user.role, userId: user._id})
                 }
                 else {
                     return res.status(403).send({success: false, msg: 'Authentication failed, wrong password'})

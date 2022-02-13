@@ -6,24 +6,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>ALTIRE API | DOCS</title>
 </head>
 <body>
-    <h1>ALTIRE API</h1>
-
+    <center><h1>ALTIRE API</h1></center>
+    <div class="endpoint">
+        <center>
+           <b>API Endpoint</b> https://floating-badlands-37340.herokuapp.com/api
+        </center>
+    </div>
     <div class="routes">
         <h1>User Routes</h1>
         <div class="items">
             <div class="method">POST</div>
             <div class="route">/signup</div>
             <div class="body">
-                
+                {
+                    name: {
+                        type: String,
+                        required: true,
+                    },
+                    email: {
+                        type: String,
+                        required: true,
+                        unique: true
+                    },
+                    phone: {
+                        type: String,
+                        required: true,
+                        unique: true,
+                    },
+                    password: {
+                        type: String,
+                        required: true
+                    },
+                    role: {
+                        type: Number,
+                        required: true
+                    },
+                }
+            </div>
+            <div class="info">
+                <p><b>NOTE</b>: Role is the role of the user. <b>0</b> is regular customer, <b>1</b> is clothier, <b>2</b> is tailor, <b>3</b> is Admin</p>
+            </div>
+        </div>
+
+        <div class="items">
+            <div class="method">POST</div>
+            <div class="route">/login</div>
+            <div class="body">
+                <div class="data-body">
+                    Body
+
+                    {
+                        email: {
+                            type: String,
+                        },
+                        password: {
+                            type: String,
+                        },
+                    }
+                </div>
+
+                <div class="response">
+                    Response
+
+                    {
+                        success: true, 
+                        token: "long string of data", 
+                        role: "0, 1, 2, 0r 3", 
+                        userId: "users id"
+                    }
+                </div>
+            </div>
+            <div class="info">
+                <p><b>NOTE</b>: Role is the role of the user. <b>0</b> is regular customer, <b>1</b> is clothier, <b>2</b> is tailor, <b>3</b> is Admin</p>
+            </div>
+        </div>
+
+        <div class="items">
+            <div class="method">Get</div>
+            <div class="route">/user</div>
+            <div class="body">
+                <div class="data-body">
+                    Headers
+
+                    authorization: "Bearer ${token}"
+                </div>
+
+                <div class="response">
+                    Response
+
+                    {
+                        _id,
+                        name,
+                        email,
+                        phone,
+                        profileImage,
+                        address,
+                        role
+                    }
+                </div>
+            </div>
+            <div class="info">
+                <p><b>NOTE</b>: The profile picture response is returned if the user has a profile picture, it was not required at signup but the user can upload a profile picture to the edit user route</p>
+                <p>Also: <b>Address</b></p>
             </div>
         </div>
     </div>
 
-    <img src="https://altire.s3.amazonaws.com/profileImage-1641247620970.jpg" alt="hgj" width="200">
+    <!-- <img src="https://altire.s3.amazonaws.com/profileImage-1641247620970.jpg" alt="hgj" width="200"> -->
 </body>
 </html>
