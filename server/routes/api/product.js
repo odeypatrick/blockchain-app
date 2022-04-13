@@ -3,7 +3,7 @@ const { addProduct, getUserProducts, getSingleProduct, getProductsByCategory, se
 const { isAuthenticated } = require('../../controllers/AuthController')
 const { upload } = require('../../controllers/upload')
 
-router.post('/product', upload.array('images', 2), isAuthenticated, addProduct)                         // Add product route
+router.post('/product', upload.array('images', 2), isAuthenticated, addProduct)   // Add product route
 router.get('/products/:userId', getUserProducts)                                 // Get products by tailor
 router.get('/product/:id', getSingleProduct)                                     // Get products by id
 router.get('/products/:category', getProductsByCategory)                         // Get products by category

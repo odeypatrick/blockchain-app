@@ -5,16 +5,19 @@ const Post = require('../models/post')
 // ADD PRODUCTS
 exports.addProduct = (req, res) => {
     if(req.user.role == 1 || req.user.role == 2) {
-        const { name, category, description, price, totalQuantity, variations, vendorId } = req.body
+        const { name, category, description, price, totalQuantity, variations, vendorId, available } = req.body
+        const imgNames = []
+        req.files.map(file => imgNames.push(file.location))
         const newProduct = Product({
             name, 
             category,
-            images: req.files.location,
+            images: imgNames,
             description,
             price,
             totalQuantity,
             variations,
             vendorId,
+            available,
             storeId
         });
         // Save product

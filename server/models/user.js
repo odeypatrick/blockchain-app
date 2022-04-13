@@ -43,7 +43,11 @@ const userSchema = new mongoose.Schema({
     store: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Store"
-    }
+    },
+    resetPasswordLink: {
+        type: String,
+        default: ''
+    },
 }, { timestamps: true })
 
 

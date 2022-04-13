@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const { mailer } = require('./mailer')
 
 exports.signup = (req, res) => {
     const { name, email, password } = req.body
@@ -109,3 +110,49 @@ exports.updateUser = (req, res) => {
     }
 }
 
+// FORGOT PASSWORD AND RESET PASSWORD
+
+// forgot password
+exports.forgotPassword = (req, res) => {
+    const { email } = req.body
+
+    User.findOne({ email }, (err, user) => {
+        if(err || !user ) {
+            return res.status(401).json({ 
+                error: 'User with provided email does not exist' 
+            })
+        }
+
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_RESET_PASSWORD, { expiresIn: '10m' })
+
+        // Send email
+        const subject = "Altire - Password reset link";
+        const body = `
+            <p>Please use the following link to reset your password: </p>
+            <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
+            <hr/>
+            <p>This email may contain sensitive information</p>
+            <p>https://altire.kemango.com.ng</p>
+        `;
+
+        // Populating the db > user > resetPasswordLnk
+        return User.updateOne({ resetPasswordLink: token }, (err, success) => {
+            if(err){
+                return res.status(500).json({ error: "Something went wrong" })
+            }
+            // if success send mail
+            mailer(process.env.EMAIL_FROM, email, subject, body)
+            .then(() => {
+                res.status(200).json({ 
+                    message: `Email has been sent to ${email}. Follow the instructions to reset your password. Link expires in 10 minutes` 
+                })
+            })
+            .catch(err => res.status(500).json({ error: err }))
+        })
+    })
+}
+
+// reset password
+exports.resetPassword = (req, res) => {
+
+}

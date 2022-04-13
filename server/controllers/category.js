@@ -6,7 +6,7 @@ exports.addCategory = (req, res) => {
         const newCategory = Category(req.body);
         newCategory.save(function (err, category) {
             if (err) {
-                res.json({success: false, error: 'Cannot add category'})
+                res.json({success: false, error: 'Cannot add category' })
             }
             else {
                 res.status(201).json({success: true, msg: 'Successfully added category'})

@@ -1,8 +1,45 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 body {
     background: #f3f3f3;
     font-family: 'Zen Kaku Gothic Antique', sans-serif;
     height: 100vh;
     color: #000;
+}
+
+.side-nav {
+    width: 250px;
+    position: fixed;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 6px 0 #979797;
+    padding: 20px;
+}
+
+.side-nav .links a {
+    display: block;
+    padding: 10px 20px;
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.side-nav .links a:hover {
+    background-color: #f3f3f3;
+}
+
+.side-nav .close-btn {
+    text-align: right;
+}
+
+.close-btn span {
+    padding: 5px;
+    font-size: 25px;
 }
 
 .body {
@@ -11,9 +48,24 @@ body {
     background-color: rgb(10, 19, 29);
     color: #fff;
     line-height: 1.9em;
+    margin-bottom: 5rem;
+    margin-top: 10px;
+}
+
+.info {
+    margin-bottom: 40px;
 }
 
 .routes {
-    width: 800px;
+    width: 700px;
     margin: 0 auto;
+}
+
+.routes h1 {
+    margin: 20px 0;
+}
+
+.comment {
+    color: #979797;
+    margin-left: 20px;
 }

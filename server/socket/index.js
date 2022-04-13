@@ -1,4 +1,5 @@
 const { io } = require('../index')
+const socketio = require('socket.io')
 let users = [];
 
 const addUser = (userId, socketId) => {

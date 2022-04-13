@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>ALTIRE API | DOCS</title>
+    <title>ALTIRE API | Products</title>
 </head>
 <body>
     <div class="side-nav">
@@ -38,68 +38,86 @@
         </center>
     </div>
     <div class="routes">
-        <h1>User Routes</h1>
+        <h1>Product Routes</h1>
         <div class="items">
             <div class="method">POST</div>
-            <div class="route">/signup</div>
+            <div class="route">/product</div>
             <div class="body">
                 {
                     name: {
                         type: String,
                         required: true,
                     },
-                    email: {
+                    category: {
                         type: String,
                         required: true,
-                        unique: true
                     },
-                    phone: {
-                        type: String,
+                    images: {
+                        max: 2,
                         required: true,
-                        unique: true,
+                        type: Array,
+                        allowedTypes: ['jpg','png', 'gif', 'jpeg'],
                     },
-                    password: {
+                    description: {
                         type: String,
                         required: true
                     },
-                    role: {
+                    price: {
+                        type: String,
+                        required: true
+                    },
+                    totalQuantity: {
                         type: Number,
                         required: true
                     },
+                    available: {
+                        type: Boolean, <span class="comment">// Either true or false. Tells if a product is available or out of stock</span>
+                        default: true
+                    },
+                    variations: {
+                        type: Object,
+                        default: {}  <span class="comment">// Empty object meaning this product has no variation</span>
+                    },
+                    vendorId: {
+                        type: String, <span class="comment">// Id of the user uploading the product...Can be retried by using user._id - check user model 
+                            for more info</span>
+                    },
+                    storeId:{
+                        type: String, <span class="comment">// Id of the store where the product is uploaded from.</span>
+                    }
                 }
             </div>
             <div class="info">
-                <p><b>NOTE</b>: Role is the role of the user. <b>0</b> is regular customer, <b>1</b> is clothier, <b>2</b> is tailor, <b>3</b> is Admin</p>
+                <p><b>NOTE</b>: Whenever a product is added, a Post concerning that product is also created</p>
             </div>
         </div>
 
         <div class="items">
-            <div class="method">POST</div>
-            <div class="route">/login</div>
+            <div class="method">GET</div>
+            <div class="route">/products/:userId <span class="comment">// Get all products belonging to a particular user --- userId here could also be called vendorId</span></div>
             <div class="body">
                 <div class="data-body">
-                    Body
-
-                    {
-                        email: {
-                            type: String,
-                        },
-                        password: {
-                            type: String,
-                        },
-                    }
-                </div>
-
-                <div class="response">
                     Response
 
+                    <span class="comment">// It returns an array of all products belonging to a user</span>
 
-                    {
-                        success: true, 
-                        token: "[]", 
-                        role: "0, 1, 2, 0r 3", 
-                        userId: "users id"
-                    }
+                    [
+                        {
+                            _id,
+                            category,
+                            images, <span class="comment">// Array of image urls</span>
+                            description,
+                            price,
+                            totalQuantity,
+                            available,
+                            variations,
+                            reviews,
+                            vendorId,
+                            storeId,
+                            createdAt,
+                            updatedAt
+                        }
+                    ]
                 </div>
             </div>
             <div class="info">
@@ -109,25 +127,27 @@
 
         <div class="items">
             <div class="method">Get</div>
-            <div class="route">/user</div>
+            <div class="route">/product/:id </div>
             <div class="body">
-                <div class="data-body">
-                    Headers
-
-                    authorization: "Bearer ${token}"
-                </div>
-
                 <div class="response">
                     Response
 
+                    <span class="comment">Returns an a single product</span>
+
                     {
                         _id,
-                        name,
-                        email,
-                        phone,
-                        profileImage,
-                        address,
-                        role
+                        category,
+                        images, <span class="comment">// Array of image urls</span>
+                        description,
+                        price,
+                        totalQuantity,
+                        available,
+                        variations,
+                        reviews,
+                        vendorId,
+                        storeId,
+                        createdAt,
+                        updatedAt
                     }
                 </div>
             </div>
