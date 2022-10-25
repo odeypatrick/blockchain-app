@@ -9,6 +9,7 @@ const morgan = require('morgan')
 const path = require('path')
 const socketio = require('socket.io')
 const io = socketio(server)
+const swaggerDocs = require("./routes/utils/swagger");
 
       // Routes
 const indexRoute = require('./routes/api'),
@@ -27,7 +28,6 @@ const indexRoute = require('./routes/api'),
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(morgan('dev'))
-app.use(express.static(path.join(__dirname, './view')))
 
 if(process.env.NODE_ENV === 'development') {
     app.use(cors())
@@ -50,6 +50,7 @@ const port = process.env.PORT || 5000;
 
 server.listen(port, () => {
     console.log(`Server running on port ${port}`)
+    swaggerDocs(app);
 })
 
 module.exports = {

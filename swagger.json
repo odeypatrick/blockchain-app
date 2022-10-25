@@ -1,0 +1,556 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Altire API",
+      "description": "Find out how your APIs work",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "Users",
+        "description": "API for users in the system"
+      }
+  
+    ],
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "securityDefinitions": {
+        "ApiKeyAuth":{
+          "type": "apiKey",
+          "in": "headers",
+          "name": "authorization"
+        }
+    },
+    "paths": {
+      "/api/signup": {
+        "post": {
+          "summary": "Signup user",
+          "tags": [
+            "Users"
+          ],
+          "description": "Login user in system",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Signup user",
+              "schema": {
+                "$ref": "#/definitions/Signup"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Signup Success",
+              "schema": {
+                "$ref": "#/definitions/Signup"
+              }
+            },
+            "403":{
+              "description": "Enter all fields!!"
+            },
+            "401":{
+              "description": "Email Already Taken"
+            },
+            "500":{
+              "description": "Failed to save user data!!"
+            }
+          }
+        }
+      },
+      "/api/login": {
+        "post": {
+          "summary": "Login user",
+          "tags": [
+            "Users"
+          ],
+          "description": "Login user in system",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Login user",
+              "schema": {
+                "$ref": "#/definitions/Login"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Login Success",
+              "schema": {
+                "$ref": "#/definitions/Login"
+              }
+            },
+            "403":{
+              "description": "User not found || Wrong password"
+            },
+            "401":{
+              "description": "Email not Found!"
+            },
+            "500":{
+              "description": "Something went wrong"
+            }
+          }
+        }
+      },
+      "/api/verify-otp": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Verify OTP after signup",
+          "parameters": [
+            {
+              "name": "offset",
+              "in": "query",
+              "description": "/api/user/verify-otp?phonenumber=08021302662&code=123456",
+              "schema": {
+                "$ref": "#/definitions/OTP"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/forgot-password": {
+        "post": {
+          "summary": "Forgot password user",
+          "tags": [
+            "Users"
+          ],
+          "description": "Recover user password",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Forgot password",
+              "schema": {
+                "$ref": "#/definitions/Forgot"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Password recovered successully",
+              "schema": {
+                "$ref": "#/definitions/Forgot"
+              }
+            },
+            "401":{
+              "description": "User with provided email does not exist"
+            },
+            "500":{
+              "description": "Something went wrong"
+            }
+          }
+        }
+      },
+      "/api/reset-password": {
+        "post": {
+          "summary": "Reset user password",
+          "tags": [
+            "Users"
+          ],
+          "description": "Reset user password",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Reset Password",
+              "schema": {
+                "$ref": "#/definitions/Reset"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Reset-Password Successfull",
+              "schema": {
+                "$ref": "#/definitions/Reset"
+              }
+            },
+            "400":{
+              "description": "System error"
+            },
+            "401":{
+              "description": "Expired Link. Try again || user dosen't exist"
+            },
+            "500":{
+              "description": "Something went wrong"
+            }
+          }
+        }
+      },
+      "/api/info": {
+        "get": {
+          "tags": ["Users"],
+          "summary": "Get user data after Login",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "Bearer {token}",
+              "schema": {
+                "$ref": "#/definitions/userData"
+              },
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/userData"
+              }
+            }
+          }
+        }
+      },
+      "/api/user": {
+        "put": {
+          "summary": "Update user info",
+          "tags": [
+            "Users"
+          ],
+          "description": "Update user information",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Signup user",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstname": {
+                    "type": "string"
+                  },
+                  "lastname": {
+                    "type": "string"
+                  },
+                  "profilePicture": {
+                    "type": "string",
+                    "format": "byte"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "phonenumber": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Authorization",
+              "in": "header",
+              "description": "Bearer {token}",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "Success",
+              "schema": {
+                "$ref": "#/definitions/Signup"
+              }
+            },
+            "403":{
+              "description": "Enter all fields!!"
+            },
+            "500":{
+              "description": "Failed to update user!!"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Signup": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "required": "true"
+          },
+          "phonenumber": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "integer"
+          }
+        }
+      },
+      "Login": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "OTP": {
+        "properties": {
+          "phonenumber": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "Forgot": {
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "Reset": {
+        "properties": {
+          "resetPasswordLink": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "Info": {
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "Card": {
+        "properties": {
+          "userId": {
+            "type": "string",
+            "required": true
+          },
+          "cardHolderName": {
+            "type": "string"
+          },
+          "cardType": {
+            "type": "string"
+          },
+          "cardNumber": {
+            "type": "string"
+          },
+          "cvv": {
+            "type": "string"
+          },
+          "expiryMonth": {
+            "type": "string"
+          },
+          "expiryYear": {
+            "type": "string"
+          }
+        }
+      },
+      "LongTerm": {
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "hireCategory": {
+            "type": "string"
+          },
+          "userCurrentLocation": {
+            "type": "object"
+          },
+          "startDate": {
+            "type": "string",
+            "pattern": "date"
+          },
+          "carTransmissionType": {
+            "type": "string"
+          },
+          "hireDuration": {
+            "type": "string"
+          },
+          "preferredLanguage": {
+            "type": "string"
+          },
+          "preferredArrivalTime": {
+            "type": "string"
+          },
+          "preferredAge": {
+            "type": "string"
+          },
+          "ratings": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "ShortTerm": {
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "userCurrentLocation": {
+            "type": "object"
+          },
+          "startDate": {
+            "type": "string",
+            "pattern": "date"
+          },
+          "endDate": {
+            "type": "string",
+            "pattern": "date"
+          },
+          "carTransmissionType": {
+            "type": "string"
+          },
+          "hireDuration": {
+            "type": "string"
+          },
+          "preferredLanguage": {
+            "type": "string"
+          },
+          "preferredAge": {
+            "type": "string"
+          },
+          "ratings": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "History": {
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "serviceType": {
+            "type": "string"
+          }
+        }
+      },
+      "Wallet": {
+        "properties": {
+          "balance": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "string"
+          }
+        }
+      },
+      "WalletTransaction": {
+        "properties": {
+          "amount": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "isInflow": {
+            "type": "boolean"
+          },
+          "paymentMethod": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "NGN"
+          },
+          "transType": {
+            "type": "string",
+            "pattern": "credit or debit"
+          },
+          "status": {
+            "type": "string",
+            "pattern": "successful"
+          },
+          "description": {
+            "type": "string"
+          },
+          "previousBalance": {
+            "type": "integer"
+          }
+        }
+      },
+      "CardCharge": {
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "Review": {
+        "properties": {
+          "driverId": {
+            "type": "string"
+          },
+          "tripId": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "integer"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
